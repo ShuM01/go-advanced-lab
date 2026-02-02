@@ -1,3 +1,5 @@
+//part 1
+
 package main
 
 import (
@@ -44,4 +46,37 @@ func Power(base, exponent int) (int, error) {
 		result *= base
 	}
 	return result, nil
+}
+
+//part2
+
+// MakeCounter returns a function that increments and returns a counter
+func MakeCounter(start int) func() int {
+	counter := start
+	return func() int {
+		counter++
+		return counter
+	}
+}
+
+// MakeMultiplier returns a function that multiplies input by the captured factor
+func MakeMultiplier(factor int) func(int) int {
+	return func(x int) int {
+		return x * factor
+	}
+}
+
+// MakeAccumulator returns three functions (add, subtract, get) that share state
+func MakeAccumulator(initial int) (func(int), func(int), func() int) {
+	acc := initial
+	add := func(x int) {
+		acc += x
+	}
+	subtract := func(x int) {
+		acc -= x
+	}
+	get := func() int {
+		return acc
+	}
+	return add, subtract, get
 }

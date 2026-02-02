@@ -87,3 +87,79 @@ func TestPower(t *testing.T) {
 		})
 	}
 }
+
+// part 2
+func TestMakeCounter(t *testing.T) {
+	counter1 := MakeCounter(0)
+	counter2 := MakeCounter(10)
+
+	tests := []struct {
+		name string
+		call func() int
+		want int
+	}{
+		{name: "counter1 first call", call: counter1, want: 1},
+		{name: "counter1 second call", call: counter1, want: 2},
+		{name: "counter2 first call", call: counter2, want: 11},
+		{name: "counter2 second call", call: counter2, want: 12},
+		{name: "counter1 third call", call: counter1, want: 3}, // independence check
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.call()
+			if got != tt.want {
+				t.Errorf("got %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestMakeMultiplier(t *testing.T) {
+	double := MakeMultiplier(2)
+	triple := MakeMultiplier(3)
+
+	tests := []struct {
+		name string
+		fn   func(int) int
+		in   int
+		want int
+	}{
+		{name: "double 5", fn: double, in: 5, want: 10},
+		{name: "triple 5", fn: triple, in: 5, want: 15},
+		{name: "double 0", fn: double, in: 0, want: 0},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.fn(tt.in)
+			if got != tt.want {
+				t.Errorf("got %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestMakeAccumulator(t *testing.T) {
+	add, sub, get := MakeAccumulator(100)
+
+	tests := []struct {
+		name string
+		op   func()
+		want int
+	}{
+		{name: "add 50", op: func() { add(50) }, want: 150},
+		{name: "subtract 30", op: func() { sub(30) }, want: 120},
+		{name: "get current", op: func() {}, want: 120},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.op()
+			got := get()
+			if got != tt.want {
+				t.Errorf("got %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
