@@ -80,3 +80,41 @@ func MakeAccumulator(initial int) (func(int), func(int), func() int) {
 	}
 	return add, subtract, get
 }
+
+//part3
+
+// Apply applies a function to each element of a slice
+func Apply(nums []int, f func(int) int) []int {
+	result := make([]int, len(nums))
+	for i, v := range nums {
+		result[i] = f(v)
+	}
+	return result
+}
+
+// Filter returns a new slice containing only elements that satisfy the predicate
+func Filter(nums []int, predicate func(int) bool) []int {
+	result := []int{}
+	for _, v := range nums {
+		if predicate(v) {
+			result = append(result, v)
+		}
+	}
+	return result
+}
+
+// Reduce reduces a slice to a single value using the operation function
+func Reduce(nums []int, initial int, operation func(int, int) int) int {
+	acc := initial
+	for _, v := range nums {
+		acc = operation(acc, v)
+	}
+	return acc
+}
+
+// Compose returns a new function that applies g first, then f
+func Compose(f func(int) int, g func(int) int) func(int) int {
+	return func(x int) int {
+		return f(g(x))
+	}
+}
