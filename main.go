@@ -143,3 +143,56 @@ func ExploreProcess() {
 	// Explanation
 	fmt.Println("Note: Other processes cannot access these memory addresses due to process isolation")
 }
+
+//part5
+
+// DoubleValue takes a pointer to an int and doubles the value
+func DoubleValue(x *int) {
+    *x = *x * 2
+    // This modifies the original variable because we dereference the pointer
+}
+
+// CreateOnStack creates a local variable and returns its value
+func CreateOnStack() int {
+    val := 42
+    // This variable stays on the stack
+    return val
+}
+
+// CreateOnHeap creates a local variable and returns a pointer to it
+func CreateOnHeap() *int {
+    val := 99
+    // This variable escapes to the heap because we return a pointer
+    return &val
+}
+
+// SwapValues swaps two integers (value semantics)
+func SwapValues(a, b int) (int, int) {
+    return b, a
+}
+
+// SwapPointers swaps the values pointed to by two pointers
+func SwapPointers(a, b *int) {
+    *a, *b = *b, *a
+}
+
+//escape analysis
+func AnalyzeEscape() {
+    stackVal := CreateOnStack()
+    heapVal := CreateOnHeap()
+
+    fmt.Println("Stack value:", stackVal)
+    fmt.Println("Heap value:", *heapVal)
+
+    /*
+        Explanation:
+        - stackVal stays on the stack because we return a plain int.
+        - heapVal escapes to the heap because we return a pointer.
+        - "Escapes to heap" means Go allocates the variable on the heap so it
+          can live beyond the function call (since a pointer to it is returned).
+    */
+}
+
+func main() {
+	AnalyzeEscape()
+}
