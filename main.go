@@ -121,78 +121,111 @@ func Compose(f func(int) int, g func(int) int) func(int) int {
 	}
 }
 
-//part4
-
-// ExploreProcess prints process and memory information
+// part4
 func ExploreProcess() {
 	fmt.Println("=== Process Information ===")
-
-	// Current process ID
-	pid := os.Getpid()
-	fmt.Printf("Current Process ID: %d\n", pid)
-
-	// Parent process ID
-	ppid := os.Getppid()
-	fmt.Printf("Parent Process ID: %d\n", ppid)
-
-	// Slice and memory addresses
-	data := []int{1, 2, 3, 4, 5}
-	fmt.Printf("Memory address of slice: %p\n", &data)
-	fmt.Printf("Memory address of first element: %p\n", &data[0])
-
-	// Explanation
-	fmt.Println("Note: Other processes cannot access these memory addresses due to process isolation")
+	fmt.Println("PID:", os.Getpid())
+	fmt.Println("PPID:", os.Getppid())
+	data := []int{1, 2, 3}
+	fmt.Printf("Slice address: %p\n", &data)
+	fmt.Printf("First element address: %p\n", &data[0])
 }
 
 //part5
 
 // DoubleValue takes a pointer to an int and doubles the value
 func DoubleValue(x *int) {
-    *x = *x * 2
-    // This modifies the original variable because we dereference the pointer
+	*x = *x * 2
+	// This modifies the original variable because we dereference the pointer
 }
 
 // CreateOnStack creates a local variable and returns its value
 func CreateOnStack() int {
-    val := 42
-    // This variable stays on the stack
-    return val
+	val := 42
+	// This variable stays on the stack
+	return val
 }
 
 // CreateOnHeap creates a local variable and returns a pointer to it
 func CreateOnHeap() *int {
-    val := 99
-    // This variable escapes to the heap because we return a pointer
-    return &val
+	val := 99
+	// This variable escapes to the heap because we return a pointer
+	return &val
 }
 
 // SwapValues swaps two integers (value semantics)
 func SwapValues(a, b int) (int, int) {
-    return b, a
+	return b, a
 }
 
 // SwapPointers swaps the values pointed to by two pointers
 func SwapPointers(a, b *int) {
-    *a, *b = *b, *a
+	*a, *b = *b, *a
 }
 
-//escape analysis
+// escape analysis
 func AnalyzeEscape() {
-    stackVal := CreateOnStack()
-    heapVal := CreateOnHeap()
+	stackVal := CreateOnStack()
+	heapVal := CreateOnHeap()
 
-    fmt.Println("Stack value:", stackVal)
-    fmt.Println("Heap value:", *heapVal)
+	fmt.Println("Stack value:", stackVal)
+	fmt.Println("Heap value:", *heapVal)
 
-    /*
-        Explanation:
-        - stackVal stays on the stack because we return a plain int.
-        - heapVal escapes to the heap because we return a pointer.
-        - "Escapes to heap" means Go allocates the variable on the heap so it
-          can live beyond the function call (since a pointer to it is returned).
-    */
 }
+
+//part6
 
 func main() {
+	fmt.Println("=== Part 1: Math Utilities ===")
+	fact, err := Factorial(5)
+	if err == nil {
+		fmt.Println("Factorial(5):", fact)
+	} else {
+		fmt.Println("Factorial error:", err)
+	}
+
+	prime, err := IsPrime(13)
+	if err == nil {
+		fmt.Println("IsPrime(13):", prime)
+	} else {
+		fmt.Println("IsPrime error:", err)
+	}
+
+	fmt.Println("\n=== Part 2: Closures ===")
+	counter := MakeCounter(0)
+	fmt.Println("Counter calls:", counter(), counter(), counter())
+	double := MakeMultiplier(2)
+	fmt.Println("Double(5):", double(5))
+	add, sub, get := MakeAccumulator(100)
+	add(50)
+	sub(30)
+	fmt.Println("Accumulator value:", get())
+
+	fmt.Println("\n=== Part 3: Higher-Order Functions ===")
+	nums := []int{1, 2, 3, 4, 5}
+	squared := Apply(nums, func(x int) int { return x * x })
+	fmt.Println("Apply square:", squared)
+	evens := Filter(nums, func(x int) bool { return x%2 == 0 })
+	fmt.Println("Filter evens:", evens)
+	sum := Reduce(nums, 0, func(acc, curr int) int { return acc + curr })
+	fmt.Println("Reduce sum:", sum)
+	composed := Compose(func(x int) int { return x + 1 }, func(x int) int { return x * 2 })
+	fmt.Println("Compose double then addOne:", composed(5))
+
+	fmt.Println("\n=== Part 4: Process Explorer ===")
+	ExploreProcess()
+
+	fmt.Println("\n=== Part 5: Pointer Playground & Escape Analysis ===")
+	val := 10
+	DoubleValue(&val)
+	fmt.Println("DoubleValue result:", val)
+
+	a, b := 5, 10
+	a, b = SwapValues(a, b)
+	fmt.Println("SwapValues result: a =", a, "b =", b)
+
+	SwapPointers(&a, &b)
+	fmt.Println("SwapPointers result: a =", a, "b =", b)
+
 	AnalyzeEscape()
 }

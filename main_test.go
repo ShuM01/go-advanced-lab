@@ -272,36 +272,37 @@ func TestCompose(t *testing.T) {
 }
 
 // part4
-func main() {
-	// Demonstrate process explorer
+func TestExploreProcess(t *testing.T) {
+	// We can’t assert exact output (PID, PPID vary each run).
+	// The goal is just to ensure it executes without panic.
 	ExploreProcess()
 }
 
-//part5
+// part5
 func TestSwapValues(t *testing.T) {
-    tests := []struct {
-        name   string
-        a, b   int
-        wantA, wantB int
-    }{
-        {name: "swap 5 and 10", a: 5, b: 10, wantA: 10, wantB: 5},
-        {name: "swap equal values", a: 7, b: 7, wantA: 7, wantB: 7},
-    }
+	tests := []struct {
+		name         string
+		a, b         int
+		wantA, wantB int
+	}{
+		{name: "swap 5 and 10", a: 5, b: 10, wantA: 10, wantB: 5},
+		{name: "swap equal values", a: 7, b: 7, wantA: 7, wantB: 7},
+	}
 
-    for _, tt := range tests {
-        t.Run(tt.name, func(t *testing.T) {
-            gotA, gotB := SwapValues(tt.a, tt.b)
-            if gotA != tt.wantA || gotB != tt.wantB {
-                t.Errorf("SwapValues() = (%v, %v), want (%v, %v)", gotA, gotB, tt.wantA, tt.wantB)
-            }
-        })
-    }
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotA, gotB := SwapValues(tt.a, tt.b)
+			if gotA != tt.wantA || gotB != tt.wantB {
+				t.Errorf("SwapValues() = (%v, %v), want (%v, %v)", gotA, gotB, tt.wantA, tt.wantB)
+			}
+		})
+	}
 }
 
 func TestSwapPointers(t *testing.T) {
-    a, b := 5, 10
-    SwapPointers(&a, &b)
-    if a != 10 || b != 5 {
-        t.Errorf("SwapPointers() failed, got a=%v b=%v", a, b)
-    }
+	a, b := 5, 10
+	SwapPointers(&a, &b)
+	if a != 10 || b != 5 {
+		t.Errorf("SwapPointers() failed, got a=%v b=%v", a, b)
+	}
 }
