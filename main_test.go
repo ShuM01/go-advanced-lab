@@ -270,3 +270,9 @@ func TestCompose(t *testing.T) {
 		})
 	}
 }
+
+// part4
+func main() {
+	// Demonstrate process explorer
+	ExploreProcess()
+}

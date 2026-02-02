@@ -4,7 +4,9 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"math"
+	"os"
 )
 
 // Factorial calculates n!
@@ -117,4 +119,27 @@ func Compose(f func(int) int, g func(int) int) func(int) int {
 	return func(x int) int {
 		return f(g(x))
 	}
+}
+
+//part4
+
+// ExploreProcess prints process and memory information
+func ExploreProcess() {
+	fmt.Println("=== Process Information ===")
+
+	// Current process ID
+	pid := os.Getpid()
+	fmt.Printf("Current Process ID: %d\n", pid)
+
+	// Parent process ID
+	ppid := os.Getppid()
+	fmt.Printf("Parent Process ID: %d\n", ppid)
+
+	// Slice and memory addresses
+	data := []int{1, 2, 3, 4, 5}
+	fmt.Printf("Memory address of slice: %p\n", &data)
+	fmt.Printf("Memory address of first element: %p\n", &data[0])
+
+	// Explanation
+	fmt.Println("Note: Other processes cannot access these memory addresses due to process isolation")
 }
